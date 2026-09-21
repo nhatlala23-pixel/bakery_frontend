@@ -64,6 +64,9 @@ axiosClient.interceptors.response.use(
       isRefreshing = true;
 
       const isAdminPath = window.location.pathname.startsWith('/admin');
+      const isProtectedPath = isAdminPath || 
+                              window.location.pathname.startsWith('/profile') || 
+                              window.location.pathname.startsWith('/checkout');
       const tokenKey = isAdminPath ? 'adminAccessToken' : 'accessToken';
       const refreshKey = isAdminPath ? 'adminRefreshToken' : 'refreshToken';
       const userKey = isAdminPath ? 'adminUser' : 'user';
@@ -85,21 +88,25 @@ axiosClient.interceptors.response.use(
           return axiosClient(originalRequest);
         } catch (refreshError) {
           processQueue(refreshError, null);
-          // Refresh failed, clear storage and redirect to login
+          // Refresh failed, clear storage and redirect only if on protected route
           localStorage.removeItem(tokenKey);
           localStorage.removeItem(refreshKey);
           localStorage.removeItem(userKey);
-          window.location.href = '/login';
+          if (isProtectedPath && window.location.pathname !== '/login') {
+            window.location.href = '/login';
+          }
           return Promise.reject(refreshError);
         } finally {
           isRefreshing = false;
         }
       } else {
-        // No refresh token, clear storage and redirect
+        // No refresh token, clear storage and redirect only if on protected route
         localStorage.removeItem(tokenKey);
         localStorage.removeItem(refreshKey);
         localStorage.removeItem(userKey);
-        window.location.href = '/login';
+        if (isProtectedPath && window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);
