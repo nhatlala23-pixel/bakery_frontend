@@ -3,18 +3,13 @@ import { Search, ChevronDown, Menu, X, Phone } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import categoryService, { type CategoryDTO } from '@/services/api/categoryService';
 import contactSettingService from '@/services/api/contactSettingService';
+import { getFullImageUrl } from '@/utils/image';
 
 export const Header = () => {
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const getFullImageUrl = (url?: string) => {
-    if (!url) return '';
-    if (url.startsWith('http')) return url;
-    return `http://localhost:8080${url.startsWith('/') ? '' : '/'}${url}`;
-  };
 
   useEffect(() => {
     const loadLogo = () => {
