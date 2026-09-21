@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-brand-light: #FFF9F5;
+  --color-brand-secondary: #F6EDE7;
+  --color-brand-accent: #C96F6F;
+  --color-brand-dark: #292322;
+  --color-brand-muted: #847A76;
+  --color-white: #FFFFFF;
+}
+
+@layer base {
+  body {
+    @apply antialiased text-brand-dark bg-brand-light font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-medium;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  .animate-float {
+    animation: float 5s ease-in-out infinite;
+  }
+}
